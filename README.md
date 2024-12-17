@@ -39,6 +39,8 @@ test = ImgTag(
                                   # Default: None
            strip=True,            # Strips whitespace from the ends of all tags
                                   # Default: True
+           strip_blank_space=True,# Strips blank space at the end of a file
+                                  # Default: True
            no_duplicates=True,    # Removes all duplicate tags (case sensitive)
                                   # Default: True
            use_warnings=True      # Toggles warnings
