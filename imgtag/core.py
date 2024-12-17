@@ -135,7 +135,7 @@ def strip_file_blank_space(filename, block_size=__DEFAULT_BLOCK_SIZE__):
 
 
 class ImgTag:
-    def __init__(self, filename, force_case=None, strip=True, no_duplicates=True, use_warnings=True, memory_limit_ratio=__DEFAULT_MEMORY_LIMIT_RATIO__):
+    def __init__(self, filename, force_case=None, strip=True, strip_blank_space=True, no_duplicates=True, use_warnings=True, memory_limit_ratio=__DEFAULT_MEMORY_LIMIT_RATIO__):
         self.is_open = False
         
         self.tags = None
@@ -155,6 +155,10 @@ class ImgTag:
         if type(strip) != bool:
             raise ValueError("strip argument must be either True or False")
         self.strip = strip
+
+        if type(strip_blank_space) != bool:
+            raise ValueError("strip_blank_space argument must be either True or False")
+        self.strip_blank_space = strip_blank_space
         
         if type(no_duplicates) != bool:
             raise ValueError("no_duplicates argument must be either True or False")
@@ -269,10 +273,11 @@ class ImgTag:
             self.xmpfile = None
             self.xmp = None
             
-            # Sometimes, libxmp saves hundreds of megabytes of zeros at the end
-            # This fixes it
-            if saved:
-                temp = strip_file_blank_space(self.filename)
+            if self.strip_blank_space:
+                # Sometimes, libxmp saves hundreds of megabytes of zeros at the end
+                # This fixes it
+                if saved:
+                    temp = strip_file_blank_space(self.filename)
             
             return saved
     
@@ -373,5 +378,3 @@ class ImgTag:
         
         self.xmp.append_array_item(libxmp.consts.XMP_NS_DC, "description", text, {"prop_array_is_alt":True})
         self.description = text
-    
-    
